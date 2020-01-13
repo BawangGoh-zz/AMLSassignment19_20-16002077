@@ -8,10 +8,17 @@ import dlib
 global basedir, image_paths, target_size
 
 # Modified the directory
+os.chdir('..')
+AMLS_dir = os.path.abspath(os.curdir)
+basedir = os.path.join(AMLS_dir,'Datasets')
+cartoon_dir = os.path.join(basedir,'cartoon_set')
+images_dir = os.path.join(cartoon_dir,'img')
+labels_path = os.path.join(cartoon_dir,'labels.csv')
 
-basedir = './dataset'
-images_dir = os.path.join(basedir,'celeba')
-labels_filename = 'labels.csv'
+# Make a new directory for cropped images
+crop_img = os.path.join(cartoon_dir, 'crop_img')
+if not os.path.exists(crop_img):
+    os.mkdir(crop_img)
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
@@ -91,7 +98,7 @@ def run_dlib_shape(image):
     # find largest face and keep
     dlibout = np.reshape(np.transpose(face_shapes[:, np.argmax(face_areas)]), [68, 2])
 
-    return dlibout, resized_image
+    return dlibout[37:48,:], resized_image
 
 def extract_features_labels():
     """
@@ -99,14 +106,14 @@ def extract_features_labels():
     It also extracts the gender label for each image.
     :return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
-        gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
+        eye_labels:      an array containing the gender label (male=0 and female=1) for each image in
                             which a face was detected
     """
     image_paths = [os.path.join(images_dir, l) for l in os.listdir(images_dir)]
     target_size = None
     labels_file = open(os.path.join(basedir, labels_filename), 'r')
     lines = labels_file.readlines()
-    gender_labels = {line.split(',')[0] : int(line.split(',')[6]) for line in lines[2:]}
+    eye_labels = {line.split('\t')[0] : int(line.split('\t')[1]) for line in lines[1:]}
     if os.path.isdir(images_dir):
         all_features = []
         all_labels = []
@@ -122,9 +129,9 @@ def extract_features_labels():
             features, _ = run_dlib_shape(img)
             if features is not None:
                 all_features.append(features)
-                all_labels.append(gender_labels[file_name])
+                all_labels.append(eye_labels[file_name])
 
     landmark_features = np.array(all_features)
-    gender_labels = (np.array(all_labels) + 1)/2 # simply converts the -1 into 0, so male=0 and female=1
-    return landmark_features, gender_labels
+    eye_labels = (np.array(all_labels) + 1)/2 # simply converts the -1 into 0, so male=0 and female=1
+    return landmark_features, eye_labels
 
