@@ -31,7 +31,13 @@ Includes several parameters for customization.
 | Parameter | Description  |
 |----|----|
 |  basedir | AMLS_assignment directory |
-
+| images_dir | Image folder within dataset directory |
+| labels_filename | Labels atrribute CSV within dataset directory |
+| CNN_model_path | Directory store CNN model |
 
 ## main.py
 Main file to execute in shell.
+| Syntax      | Description | Test Text     |
+| :---        |    :----:   |          ---: |
+| Header      | Title       | Here's this   |
+| Paragraph   | Text        | And more      |
