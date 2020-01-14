@@ -98,7 +98,7 @@ def run_dlib_shape(image):
     # find largest face and keep
     dlibout = np.reshape(np.transpose(face_shapes[:, np.argmax(face_areas)]), [68, 2])
 
-    return dlibout[37:48,:], resized_image
+    return dlibout, resized_image
 
 def extract_features_labels():
     """
