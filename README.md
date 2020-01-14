@@ -29,7 +29,7 @@ Contains preprocessing function for task A1, A2, B1 and B2
 Contains facial landmarks extraction function for task A1 and A2.
 Includes several parameters for customization.
 | Parameter | Description  |
-|---|---|
+|:---------:| :-----------:|
 |  basedir | AMLS_assignment directory |
 | images_dir | Image folder within dataset directory |
 | labels_filename | Labels atrribute CSV within dataset directory |
@@ -37,13 +37,3 @@ Includes several parameters for customization.
 
 ## main.py
 Main file to execute in shell.
-| Parameter | Description  |
-| --- | --- |
-|  lr | Adam learning rate |
-| output | Number of neurons in output layer |
-| final_activation | Activation of output layer |
-| optimizer_mode | Optimizer used |
-| loss_mode | Loss function used |
-| metrics_mode | Performance metric to observe |
-| classes | Dict to list all class indices |
-| units| Number of neurons |
