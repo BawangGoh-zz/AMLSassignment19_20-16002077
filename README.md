@@ -29,7 +29,7 @@ Contains preprocessing function for task A1, A2, B1 and B2
 Contains facial landmarks extraction function for task A1 and A2.
 Includes several parameters for customization.
 | Parameter | Description  |
-| --- | --- |
+| --------- | -----------  |
 |  basedir | AMLS_assignment directory |
 | images_dir | Image folder within dataset directory |
 | labels_filename | Labels atrribute CSV within dataset directory |
