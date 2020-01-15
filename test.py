@@ -1,9 +1,9 @@
 import preprocess
 from lab2_landmarks import *
 from A1.task_A1 import SVM_A1
-# from A2.task_A2 import SVM_A2
+from A2.task_A2 import SVM_A2
 from B1.task_B1 import CNN_B1
-
+from B2.task_B2 import CNN_B2
 
 # # ======================================================================================================================
 # Task A1
@@ -49,11 +49,12 @@ acc_B1_test = model_B1.test(model_B1_path, test_gen)
 
 
 # # ======================================================================================================================
-# # Task B2
-# model_B2 = B2(args...)
-# acc_B2_train = model_B2.train(args...)
-# acc_B2_test = model_B2.test(args...)
-# # Clean up memory/GPU etc...
+# Task B2
+train_gen2, valid_gen2, eval_gen2, test_gen2 = preprocess.data_preprocessing_B2(cartoon_images_dir, labels_path)
+model_B2 = CNN_B2()
+acc_B2_train, model_path2 = model_B1.train(B2_dir, 5, train_gen2, valid_gen2, eval_gen2)
+acc_B2_test = model_B1.test(model_B2_path, test_gen2)
+# Clean up memory/GPU etc...
 
 
 # # ======================================================================================================================
@@ -70,6 +71,7 @@ def print_train_test_acc(task, dct1, dct2):
 print_train_test_acc('Task A1', acc_A1_train, acc_A1_test)
 print_train_test_acc('Task A1', acc_A2_train, acc_A2_test)
 print_train_test_acc('Task B1', acc_B1_train, acc_B1_test)
+print_train_test_acc('Task B2', acc_B2_train, acc_B2_test)
 
 
 # # If you are not able to finish a task, fill the corresponding variable with 'TBD'. For example:

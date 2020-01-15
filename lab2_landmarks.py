@@ -34,6 +34,7 @@ labels_test_path = os.path.join(cartoon_test_dir,'labels.csv')
 B1_dir = os.path.join(AMLS_dir, 'B1')
 model_B1_path = os.path.join(B1_dir, 'VGGNet.h5')
 B2_dir = os.path.join(AMLS_dir, 'B2')
+model_B2_path = os.path.join(B2_dir, 'VGGNet_eye.h5')
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')

@@ -88,6 +88,68 @@ def data_preprocessing_B1(images_dir, labels_path):
 
 	return train_generator, valid_generator, eval_generator, test_generator
 
+def data_preprocessing_B2(images_dir, labels_path):
+	# Converting csv into dataframe using read_csv(label_path)
+	cartoon_df = pd.read_csv(os.path.normcase(labels_path), sep='\t', engine='python')
+	df = cartoon_df[['file_name', 'eye_color']]
+
+	# Convert the face shape column to class 1-5
+	df.loc[:,'eye_color'] += 1
+
+	# Convert face shape column type from int64 to str for data generator
+	df = df.applymap(str)
+	
+
+	# Setup data generator for train and validation dataset generator
+	train_df, test_df = train_test_split(df, train_size=0.7, random_state=42)
+	train_datagen = ImageDataGenerator(rescale=1./255,
+	                                   horizontal_flip=True,
+	                                   vertical_flip=True,
+	                                   validation_split=0.3) 
+
+	# Generating training and validation dataset for VGGNet CNN
+	train_generator = train_datagen.flow_from_dataframe(dataframe=train_df,
+	                                                    directory=images_dir,
+	                                                    x_col="file_name",
+	                                                    y_col="eye_color",
+	                                                    target_size=(32, 32),
+	                                                    batch_size=32,
+	                                                    shuffle=True,
+	                                                    class_mode='categorical',
+	                                                    subset='training')
+	valid_generator = train_datagen.flow_from_dataframe(dataframe=train_df,
+	                                                    directory=images_dir,
+	                                                    x_col="file_name",
+	                                                    y_col="eye_color",
+	                                                    target_size=(32, 32),
+	                                                    batch_size=32,
+	                                                    shuffle=True, 
+	                                                    class_mode='categorical',
+	                                                    subset='validation')
+
+	# Evaluate the model with validation dataset
+	eval_generator = train_datagen.flow_from_dataframe(dataframe=train_df,
+	                                                    directory=images_dir,
+	                                                    x_col="file_name",
+	                                                    y_col="eye_color",
+	                                                    target_size=(32, 32),
+	                                                    batch_size=1,
+	                                                    shuffle=True, 
+	                                                    class_mode='categorical',
+	                                                    subset='validation')
+
+	# Generate test dataset from dataframe
+	test_datagen = ImageDataGenerator(rescale=1./255)
+	test_generator = test_datagen.flow_from_dataframe(dataframe=test_df,
+	                                                    directory=images_dir,
+	                                                    x_col="file_name",
+	                                                    y_col="eye_color",
+	                                                    target_size=(32, 32),
+	                                                    batch_size=1,
+	                                                    shuffle=False,
+	                                                    class_mode='categorical')
+
+	return train_generator, valid_generator, eval_generator, test_generator
 
 ####################################################################
 ####### Pre-processing features data from extra test dataset #######
